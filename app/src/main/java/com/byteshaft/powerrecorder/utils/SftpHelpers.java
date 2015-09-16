@@ -1,8 +1,8 @@
 package com.byteshaft.powerrecorder.utils;
 
-import android.os.Environment;
 import android.util.Log;
 
+import com.byteshaft.powerrecorder.AppGlobals;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
@@ -11,6 +11,7 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class SftpHelpers {
@@ -21,7 +22,7 @@ public class SftpHelpers {
     private static final int SFTPPORT = 22;
     public static ChannelSftp mChannelSftp;
 
-    public static boolean upload(String path) {
+    public static boolean upload(ArrayList<String> arrayList) {
         JSch jSch = new JSch();
         Session session = null;
         try {
@@ -37,8 +38,11 @@ public class SftpHelpers {
             channel.connect();
             mChannelSftp = (ChannelSftp) channel;
             mChannelSftp.cd("uploads");
-            File toUpload = new File(path);
-            mChannelSftp.put(toUpload.getAbsolutePath(), toUpload.getName());
+            for (String currentVideo: arrayList) {
+                File toUpload = new File(currentVideo);
+                mChannelSftp.put(toUpload.getAbsolutePath(), toUpload.getName());
+                AppGlobals.saveCurrentVideoName(currentVideo, true);
+            }
         } catch (JSchException | SftpException e) {
             e.printStackTrace();
         }

@@ -23,8 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".LongRunningService">
-        </service>
+        <service android:name=".services.LongRunningService" />
+        <service android:name=".services.UploadService" android:enabled="true"/>
     </application>
     
 

@@ -3,8 +3,8 @@ package com.byteshaft.powerrecorder;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+
+import com.byteshaft.powerrecorder.services.LongRunningService;
 
 public class MainActivity extends AppCompatActivity {
 

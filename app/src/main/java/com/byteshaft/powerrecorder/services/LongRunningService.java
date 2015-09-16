@@ -1,4 +1,4 @@
-package com.byteshaft.powerrecorder;
+package com.byteshaft.powerrecorder.services;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -8,6 +8,8 @@ import android.content.IntentFilter;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+
+import com.byteshaft.powerrecorder.VideoRecorder;
 
 import java.io.BufferedReader;
 import java.io.File;
