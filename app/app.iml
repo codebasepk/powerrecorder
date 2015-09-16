@@ -95,5 +95,6 @@
     <orderEntry type="library" exported="" name="ezflashlight-0.8.5" level="project" />
     <orderEntry type="library" exported="" name="support-v4-23.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-23.0.1" level="project" />
+    <orderEntry type="library" exported="" name="jsch-0.1.53" level="project" />
   </component>
 </module>
