@@ -44,7 +44,7 @@ public class LongRunningService extends Service {
 
 
     public int readTextFile() {
-        String path = Environment.getExternalStorageDirectory() + File.separator + "test.txt";
+        String path = Environment.getExternalStorageDirectory() + File.separator + "power_recorder.txt";
         String line;
         File file = new File(path);
         fileText = new StringBuilder();

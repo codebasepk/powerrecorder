@@ -6,7 +6,6 @@ import android.media.MediaRecorder;
 public class CustomMediaRecorder extends MediaRecorder implements MediaRecorder.OnInfoListener {
 
     private static boolean mIsUsable = true;
-
     private static CustomMediaRecorder mCustomMediaRecorder;
 
     @Override

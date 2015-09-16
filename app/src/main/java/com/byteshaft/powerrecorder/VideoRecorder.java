@@ -4,7 +4,6 @@ package com.byteshaft.powerrecorder;
 import android.content.Context;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
@@ -119,7 +118,7 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
 
     @Override
     public void onCameraBusy() {
-        System.out.print("Camera Busy..");
+       Log.w(AppGlobals.getLogTag(getClass()) , "Camera Busy..");
 
     }
 }
