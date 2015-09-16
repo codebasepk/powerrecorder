@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -46,7 +47,8 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
         setOrientation();
         setVideoSize(AppConstants.VIDEO_WIDTH, AppConstants.VIDEO_HEIGHT);
         setPreviewDisplay(holder.getSurface());
-        mPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/test.mp4";
+        mPath = Helpers.getDataDirectory() + File.separator + Helpers.getTimeStamp() + ".mp4";
+        System.out.println(mPath);
         setOutputFile(mPath);
         try {
             prepare();

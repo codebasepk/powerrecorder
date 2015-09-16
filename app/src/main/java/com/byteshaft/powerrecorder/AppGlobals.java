@@ -6,6 +6,8 @@ import android.content.Context;
 
 public class AppGlobals extends Application {
 
+    private static String LOG_TAG = "Power Recorder";
+
     private static Context sContext;
     private static boolean sIsVideoRecording;
 
@@ -21,5 +23,9 @@ public class AppGlobals extends Application {
 
     public static void videoRecordingInProgress(boolean value) {
         sIsVideoRecording = value;
+    }
+
+    public static String getLogTag(Class aClass) {
+        return LOG_TAG + aClass.getName();
     }
 }
