@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PowerRecorder.iml" filepath="$PROJECT_DIR$/PowerRecorder.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/powerrecorder.iml" filepath="$PROJECT_DIR$/powerrecorder.iml" />
     </modules>
   </component>
 </project>
