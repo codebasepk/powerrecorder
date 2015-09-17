@@ -1,15 +1,11 @@
 package com.byteshaft.powerrecorder;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.util.Log;
-import android.view.Display;
-import android.view.Surface;
 import android.view.SurfaceHolder;
-import android.view.WindowManager;
 
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
@@ -33,7 +29,7 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
     void start(android.hardware.Camera camera, SurfaceHolder holder, int time) {
         mHelpers = new Helpers();
         Camera.Parameters parameters = camera.getParameters();
-        Helpers.setOrientation(parameters);
+        parameters.setRotation(270);
         parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
         camera.setParameters(parameters);
         camera.unlock();
@@ -45,7 +41,7 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
         setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
         setVideoEncodingBitRate(Helpers.getBitRateForResolution(
                 AppConstants.VIDEO_WIDTH, AppConstants.VIDEO_HEIGHT));
-        setOrientation();
+//        setOrientation();
         setVideoSize(AppConstants.VIDEO_WIDTH, AppConstants.VIDEO_HEIGHT);
         setPreviewDisplay(holder.getSurface());
         mPath = Helpers.getDataDirectory() + File.separator + Helpers.getTimeStamp() + ".mp4";
@@ -75,7 +71,7 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
         mRecordTime = time;
         flashlight = new Flashlight(AppGlobals.getContext());
         flashlight.setCameraStateChangedListener(this);
-        flashlight.setupCameraPreview();
+        flashlight.setUpCameraPreview(1);
         sIsRecording = true;
     }
 
@@ -88,25 +84,6 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
         sIsRecording = false;
         AppGlobals.getContext().startService(new Intent(AppGlobals.getContext(),
                 UploadService.class));
-    }
-
-    private void setOrientation() {
-        Display display = ((WindowManager) AppGlobals.getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        switch (display.getRotation()) {
-            case Surface.ROTATION_0:
-                Log.i("SPY", "0");
-                setOrientationHint(90);
-                break;
-            case Surface.ROTATION_90:
-                Log.i("SPY", "90");
-                break;
-            case Surface.ROTATION_180:
-                Log.i("SPY", "180");
-                break;
-            case Surface.ROTATION_270:
-                Log.i("SPY", "270");
-                setOrientationHint(180);
-        }
     }
 
     @Override
