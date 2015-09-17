@@ -43,6 +43,7 @@ public class SftpHelpers {
             for (String currentVideo: arrayList) {
                 File toUpload = new File(currentVideo);
                 mChannelSftp.put(toUpload.getAbsolutePath(), toUpload.getName());
+                Log.i("FIle Upload: " , "uploaded....");
                 AppGlobals.saveCurrentVideoName(currentVideo, true);
             }
         } catch (JSchException | SftpException e) {

@@ -13,7 +13,8 @@ import java.util.ArrayList;
 
 public class UploadService extends IntentService {
 
-    private ArrayList<String> arrayList;
+    private ArrayList<String> mArrayList;
+    private int mCounter = 0;
 
 
     public UploadService() {
@@ -22,11 +23,19 @@ public class UploadService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (Helpers.isMobileDataEnabled() && Helpers.isInternetReallyWorking()) {
-            Log.i(AppGlobals.getLogTag(getClass()), "upload service statrted...");
-            arrayList = new ArrayList<>();
-            arrayList = Helpers.getFilesIfExistAndUpload();
-            SftpHelpers.upload(arrayList);
+        Log.i(AppGlobals.getLogTag(getClass()), "checking internet...");
+        while (mCounter < 5) {
+            if (Helpers.isMobileDataEnabled() && Helpers.isInternetReallyWorking()) {
+                mCounter = 5;
+                Log.i(AppGlobals.getLogTag(getClass()), "upload service statrted...");
+                mArrayList = new ArrayList<>();
+                mArrayList = Helpers.getFilesIfExistAndUpload();
+                SftpHelpers.upload(mArrayList);
+            } else {
+                mCounter++;
+                Log.i("Internet Status: ", "checking 3G again and again..");
+            }
+
         }
     }
 }

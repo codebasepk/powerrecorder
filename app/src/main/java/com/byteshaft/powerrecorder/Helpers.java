@@ -86,7 +86,6 @@ public class Helpers {
         File filePath = new File(storageDirectory);
         File[] files = filePath.listFiles();
             for (File currentFile: files) {
-                Log.i("current file", currentFile.toString());
                 if (!AppGlobals.getCurrentFileState(currentFile.getAbsolutePath()) &&
                         currentFile.getAbsolutePath().contains("mp4")) {
                     arrayList.add(currentFile.getAbsolutePath());

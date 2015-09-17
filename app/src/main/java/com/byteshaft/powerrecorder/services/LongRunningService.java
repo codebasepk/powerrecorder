@@ -72,19 +72,16 @@ public class LongRunningService extends Service {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(Helpers.
                     getDataDirectory()+File.separator + AppGlobals.TEXT_FILE));
-            System.out.println(Helpers.getDataDirectory()+ File.separator + AppGlobals.TEXT_FILE);
             while ((line = bufferedReader.readLine()) != null) {
                 fileText.append(line);
             }
             bufferedReader.close();
-            System.out.println(fileText);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
 
         int t = Integer.valueOf(fileText.toString());
-        System.out.println(t);
         return t*1000;
     }
 }
