@@ -66,7 +66,6 @@ public class LongRunningService extends Service {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
         fileText = new StringBuilder();
         try {
@@ -80,7 +79,6 @@ public class LongRunningService extends Service {
         catch (IOException e) {
             e.printStackTrace();
         }
-
         int t = Integer.valueOf(fileText.toString());
         return t*1000;
     }
