@@ -23,7 +23,6 @@ public class SftpHelpers {
     private static final int SFTPPORT = 22;
     public static ChannelSftp mChannelSftp;
 
-
     public static boolean upload(ArrayList<String> arrayList) {
         JSch jSch = new JSch();
         Session session = null;

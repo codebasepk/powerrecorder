@@ -36,7 +36,6 @@ public class UploadService extends IntentService {
                 mCounter++;
                 Log.i("Internet Status: ", "checking 3G again and again..");
             }
-
         }
     }
 }

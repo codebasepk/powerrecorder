@@ -123,6 +123,5 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
     @Override
     public void onCameraBusy() {
        Log.w(AppGlobals.getLogTag(getClass()) , "Camera Busy..");
-
     }
 }

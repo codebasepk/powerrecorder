@@ -8,7 +8,6 @@ import android.util.Log;
 import com.byteshaft.powerrecorder.AppGlobals;
 import com.byteshaft.powerrecorder.services.UploadService;
 
-
 public class ConnectionChangeReceiver extends BroadcastReceiver {
 
     @Override
