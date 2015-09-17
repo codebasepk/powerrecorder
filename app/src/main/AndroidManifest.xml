@@ -25,6 +25,11 @@
         </activity>
         <service android:name=".services.LongRunningService" />
         <service android:name=".services.UploadService" android:enabled="true"/>
+        <receiver android:name=".receivers.ConnectionChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
     </application>
     
 

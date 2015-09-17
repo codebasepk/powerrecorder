@@ -25,7 +25,5 @@ public class UploadService extends IntentService {
             arrayList = Helpers.getFilesIfExistAndUpload();
             SftpHelpers.upload(arrayList);
         }
-
-
     }
 }
