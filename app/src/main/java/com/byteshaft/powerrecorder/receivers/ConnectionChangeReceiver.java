@@ -15,6 +15,5 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.i(AppGlobals.getLogTag(getClass()), "connection change");
         context.startService(new Intent(context, UploadService.class));
-
     }
 }
