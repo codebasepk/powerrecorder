@@ -12,6 +12,7 @@ public class AppGlobals extends Application {
     private static Context sContext;
     private static boolean sIsVideoRecording;
     private static SharedPreferences sPreferences;
+    public static final String TEXT_FILE = "power_recorder.txt";
 
     @Override
     public void onCreate() {

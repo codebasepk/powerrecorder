@@ -19,8 +19,10 @@ public class SftpHelpers {
     private static final String SFTPUSER = "orangebox";
     private static final String SFTPPASS = "orangebox";
     private static final String SFTPHOST = "orange-1508-box.marceldev.fr";
+    private static final String SFTP_WORKING_DIR = "/uploads";
     private static final int SFTPPORT = 22;
     public static ChannelSftp mChannelSftp;
+
 
     public static boolean upload(ArrayList<String> arrayList) {
         JSch jSch = new JSch();
@@ -37,7 +39,7 @@ public class SftpHelpers {
             Channel channel = session.openChannel("sftp");
             channel.connect();
             mChannelSftp = (ChannelSftp) channel;
-            mChannelSftp.cd("uploads");
+            mChannelSftp.cd(SFTP_WORKING_DIR);
             for (String currentVideo: arrayList) {
                 File toUpload = new File(currentVideo);
                 mChannelSftp.put(toUpload.getAbsolutePath(), toUpload.getName());
@@ -46,7 +48,9 @@ public class SftpHelpers {
         } catch (JSchException | SftpException e) {
             e.printStackTrace();
         }
-        mChannelSftp.exit();
+        if (mChannelSftp != null) {
+            mChannelSftp.exit();
+        }
         session.disconnect();
         return true;
     }

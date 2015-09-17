@@ -82,16 +82,15 @@ public class Helpers {
     public static ArrayList<String> getFilesIfExistAndUpload() {
         ArrayList<String> arrayList = new ArrayList<>();
         String storageDirectory = getDataDirectory();
+        System.out.println("Storage dir : "+storageDirectory);
         File filePath = new File(storageDirectory);
         File[] files = filePath.listFiles();
-        for (File folders : files) {
-            File folderPath = new File(folders.getAbsolutePath());
-            File[] dataInsideFolder = folderPath.listFiles();
-            for (File currentFile: dataInsideFolder) {
-                if (!AppGlobals.getCurrentFileState(currentFile.getAbsolutePath())) {
+            for (File currentFile: files) {
+                Log.i("current file", currentFile.toString());
+                if (!AppGlobals.getCurrentFileState(currentFile.getAbsolutePath()) &&
+                        currentFile.getAbsolutePath().contains("mp4")) {
                     arrayList.add(currentFile.getAbsolutePath());
                 }
-            }
         }
         return arrayList;
     }
