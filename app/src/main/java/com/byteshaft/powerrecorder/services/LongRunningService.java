@@ -1,17 +1,21 @@
-package com.byteshaft.powerrecorder;
+package com.byteshaft.powerrecorder.services;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+
+import com.byteshaft.powerrecorder.AppGlobals;
+import com.byteshaft.powerrecorder.Helpers;
+import com.byteshaft.powerrecorder.VideoRecorder;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class LongRunningService extends Service {
@@ -44,12 +48,30 @@ public class LongRunningService extends Service {
 
 
     public int readTextFile() {
-        String path = Environment.getExternalStorageDirectory() + File.separator + "test.txt";
+        String path = Helpers.getDataDirectory();
         String line;
-        File file = new File(path);
+        File file = new File(path + AppGlobals.TEXT_FILE);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            FileWriter writer;
+            try {
+                writer = new FileWriter(new File(path, AppGlobals.TEXT_FILE));
+                writer.append("10");
+                writer.flush();
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
         fileText = new StringBuilder();
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(Helpers.
+                    getDataDirectory()+File.separator + AppGlobals.TEXT_FILE));
             while ((line = bufferedReader.readLine()) != null) {
                 fileText.append(line);
             }
@@ -60,7 +82,6 @@ public class LongRunningService extends Service {
         }
 
         int t = Integer.valueOf(fileText.toString());
-        System.out.println(t);
         return t*1000;
     }
 }

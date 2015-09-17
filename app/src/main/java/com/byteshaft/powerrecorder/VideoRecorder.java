@@ -2,9 +2,9 @@ package com.byteshaft.powerrecorder;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
@@ -13,6 +13,7 @@ import android.view.WindowManager;
 
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
+import com.byteshaft.powerrecorder.services.UploadService;
 
 import java.io.File;
 import java.io.IOException;
@@ -85,6 +86,8 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
         release();
         flashlight.releaseAllResources();
         sIsRecording = false;
+        AppGlobals.getContext().startService(new Intent(AppGlobals.getContext(),
+                UploadService.class));
     }
 
     private void setOrientation() {
@@ -119,7 +122,7 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
 
     @Override
     public void onCameraBusy() {
-        System.out.print("Camera Busy..");
+       Log.w(AppGlobals.getLogTag(getClass()) , "Camera Busy..");
 
     }
 }

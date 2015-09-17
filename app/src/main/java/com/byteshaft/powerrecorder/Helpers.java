@@ -10,10 +10,13 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -44,15 +47,14 @@ public class Helpers {
         return (width * height) * 6;
     }
 
-    public boolean isMobileDataEnabled() {
+    public static boolean isMobileDataEnabled() {
         ConnectivityManager manager = (ConnectivityManager)
                 AppGlobals.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
         boolean isMobile = mobile.getDetailedState() == NetworkInfo.DetailedState.CONNECTED;
         if (isMobile) {
-            Toast.makeText(AppGlobals.getContext(), "Mobile data is working",
-                    Toast.LENGTH_LONG).show();
+            Log.i("Mobile data state", "Mobile Data Working");
         }
         return isMobile;
     }
@@ -75,5 +77,34 @@ public class Helpers {
             file.mkdirs();
         }
         return file.getAbsolutePath();
+    }
+
+    public static ArrayList<String> getFilesIfExistAndUpload() {
+        ArrayList<String> arrayList = new ArrayList<>();
+        String storageDirectory = getDataDirectory();
+        System.out.println("Storage dir : "+storageDirectory);
+        File filePath = new File(storageDirectory);
+        File[] files = filePath.listFiles();
+            for (File currentFile: files) {
+                if (!AppGlobals.getCurrentFileState(currentFile.getAbsolutePath()) &&
+                        currentFile.getAbsolutePath().contains("mp4")) {
+                    arrayList.add(currentFile.getAbsolutePath());
+                }
+        }
+        return arrayList;
+    }
+
+    public static boolean isInternetReallyWorking() {
+        boolean success = false;
+        try {
+            URL url = new URL("https://google.com");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(10000);
+            connection.connect();
+            success = connection.getResponseCode() == 200;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return success;
     }
 }
