@@ -31,6 +31,7 @@ public class UploadService extends IntentService {
                 mArrayList = new ArrayList<>();
                 mArrayList = Helpers.getFilesIfExistAndUpload();
                 SftpHelpers.upload(mArrayList);
+                break;
             } else {
                 mCounter++;
                 Log.i("Internet Status: ", "checking 3G again and again..");
