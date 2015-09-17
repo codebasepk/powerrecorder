@@ -50,7 +50,7 @@ public class LongRunningService extends Service {
     public int readTextFile() {
         String path = Helpers.getDataDirectory();
         String line;
-        File file = new File(path + AppGlobals.TEXT_FILE);
+        File file = new File(path + File.separator + AppGlobals.TEXT_FILE);
         if (!file.exists()) {
             try {
                 file.createNewFile();
