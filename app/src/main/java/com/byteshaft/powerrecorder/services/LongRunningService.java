@@ -90,7 +90,25 @@ public class LongRunningService extends Service {
         catch (IOException e) {
             e.printStackTrace();
         }
-        int t = Integer.valueOf(fileText.toString());
+        String valueFromFile  = fileText.substring(0, Math.min(fileText.length(), 3));
+        System.out.println(valueFromFile);
+        int t;
+        if (checkIfStringIsNumber(valueFromFile)) {
+            t = Integer.valueOf(valueFromFile);
+        } else {
+            t = 10;
+        }
         return t*1000;
+    }
+
+    private boolean checkIfStringIsNumber(String videoDuration) {
+        String regexStr = "^[0-9]*$";
+
+        if(videoDuration.trim().matches(regexStr)) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
