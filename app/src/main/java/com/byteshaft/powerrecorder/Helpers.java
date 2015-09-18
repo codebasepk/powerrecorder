@@ -7,6 +7,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
+import android.view.WindowManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -85,15 +88,23 @@ public class Helpers {
         return success;
     }
 
-    public static int getFrontCameraIndex() {
-        Camera.CameraInfo ci = new Camera.CameraInfo();
-        for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
-            Camera.getCameraInfo(i, ci);
-            if (ci.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                return i;
-            }
-
+    public static void setOrientation(Camera.Parameters parameters) {
+        Display display = ((WindowManager) AppGlobals.getContext().getSystemService
+                (Context.WINDOW_SERVICE)).getDefaultDisplay();
+        switch (display.getRotation()) {
+            case Surface.ROTATION_0:
+                Log.i("SPY", "0");
+                parameters.setRotation(90);
+                break;
+            case Surface.ROTATION_90:
+                Log.i("SPY", "90");
+                break;
+            case Surface.ROTATION_180:
+                Log.i("SPY", "180");
+                break;
+            case Surface.ROTATION_270:
+                Log.i("SPY", "270");
+                parameters.setRotation(180);
         }
-        return -1;
     }
 }

@@ -24,9 +24,11 @@ import java.io.IOException;
 public class LongRunningService extends Service {
 
     private StringBuilder fileText;
+    public static boolean serviceRunning = false;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        serviceRunning = true;
         Log.i( AppGlobals.getLogTag(getClass()),"Service Started...");
         IntentFilter intentFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         registerReceiver(receiver, intentFilter);
