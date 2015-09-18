@@ -98,13 +98,13 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
     }
 
     public void stopRecording() {
-        Helpers.saveCounterValue((mPreviousCounterValue + 1));
         System.out.println("Recording Stopped...");
         stop();
         reset();
         release();
         flashlight.releaseAllResources();
         sIsRecording = false;
+        Helpers.saveCounterValue((mPreviousCounterValue + 1));
         AppGlobals.getContext().startService(new Intent(AppGlobals.getContext(),
                 UploadService.class));
     }
