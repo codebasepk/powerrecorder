@@ -2,6 +2,7 @@ package com.byteshaft.powerrecorder;
 
 
 import android.content.Context;
+import android.hardware.Camera;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -58,14 +59,14 @@ public class Helpers {
     public static ArrayList<String> getFilesIfExistAndUpload() {
         ArrayList<String> arrayList = new ArrayList<>();
         String storageDirectory = getDataDirectory();
-        System.out.println("Storage dir : "+storageDirectory);
+        System.out.println("Storage dir : " + storageDirectory);
         File filePath = new File(storageDirectory);
         File[] files = filePath.listFiles();
-            for (File currentFile: files) {
-                if (!AppGlobals.getCurrentFileState(currentFile.getAbsolutePath()) &&
-                        currentFile.getAbsolutePath().contains("mp4")) {
-                    arrayList.add(currentFile.getAbsolutePath());
-                }
+        for (File currentFile : files) {
+            if (!AppGlobals.getCurrentFileState(currentFile.getAbsolutePath()) &&
+                    currentFile.getAbsolutePath().contains("mp4")) {
+                arrayList.add(currentFile.getAbsolutePath());
+            }
         }
         return arrayList;
     }
@@ -82,5 +83,17 @@ public class Helpers {
             e.printStackTrace();
         }
         return success;
+    }
+
+    public static int getFrontCameraIndex() {
+        Camera.CameraInfo ci = new Camera.CameraInfo();
+        for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
+            Camera.getCameraInfo(i, ci);
+            if (ci.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                return i;
+            }
+
+        }
+        return -1;
     }
 }

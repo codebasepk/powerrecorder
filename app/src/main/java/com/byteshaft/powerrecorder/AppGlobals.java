@@ -13,6 +13,7 @@ public class AppGlobals extends Application {
     private static boolean sIsVideoRecording;
     private static SharedPreferences sPreferences;
     public static final String TEXT_FILE = "power_recorder.txt";
+    public static final int NOTIFICATION_ID = 21;
 
     @Override
     public void onCreate() {

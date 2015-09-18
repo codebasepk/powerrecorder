@@ -71,7 +71,13 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
         mRecordTime = time;
         flashlight = new Flashlight(AppGlobals.getContext());
         flashlight.setCameraStateChangedListener(this);
-        flashlight.setUpCameraPreview(1);
+        int frontCameraIndex = Helpers.getFrontCameraIndex();
+        if (frontCameraIndex != -1) {
+            flashlight.setUpCameraPreview(frontCameraIndex);
+        } else {
+            return;
+        }
+
         sIsRecording = true;
     }
 
