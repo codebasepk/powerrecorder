@@ -14,6 +14,7 @@ public class AppGlobals extends Application {
     private static SharedPreferences sPreferences;
     public static final String TEXT_FILE = "power_recorder.txt";
     public static final int NOTIFICATION_ID = 21;
+    public static final String COUNTER_VALUE = "counter_value";
 
     @Override
     public void onCreate() {

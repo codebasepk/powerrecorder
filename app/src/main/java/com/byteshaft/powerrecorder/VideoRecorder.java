@@ -26,6 +26,8 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
     private Helpers mHelpers;
     private String mPath;
     private static boolean sIsRecording;
+    private int mPreviousCounterValue;
+
     public static boolean isRecording() {
         return sIsRecording;
     }
@@ -48,7 +50,9 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
         setOrientation();
         setVideoSize(AppConstants.VIDEO_WIDTH, AppConstants.VIDEO_HEIGHT);
         setPreviewDisplay(holder.getSurface());
-        mPath = Helpers.getDataDirectory() + File.separator + Helpers.getTimeStamp() + ".mp4";
+        mPreviousCounterValue = Helpers.getPreviousCounterValue();
+        mPath = Helpers.getDataDirectory() + File.separator + "video_" + getPreviousValueAndAddOne
+                (mPreviousCounterValue) + ".mp4";
         System.out.println(mPath);
         setOutputFile(mPath);
         try {
@@ -71,6 +75,20 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
         }, time);
     }
 
+    private String getPreviousValueAndAddOne(int previousValue) {
+        switch (String.valueOf(previousValue).length()) {
+            case 1:
+                return "00" + (previousValue + 1);
+            case 2:
+                return "0" + (previousValue + 1);
+            case 3:
+                return String.valueOf(previousValue + 1);
+            default:
+                return "00" + (previousValue + 1);
+        }
+    }
+
+
     public void start(int time) {
         mRecordTime = time;
         flashlight = new Flashlight(AppGlobals.getContext());
@@ -80,6 +98,7 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
     }
 
     public void stopRecording() {
+        Helpers.saveCounterValue((mPreviousCounterValue + 1));
         System.out.println("Recording Stopped...");
         stop();
         reset();

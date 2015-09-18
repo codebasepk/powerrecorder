@@ -2,10 +2,12 @@ package com.byteshaft.powerrecorder;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
@@ -15,10 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.TimeZone;
 
 public class Helpers {
 
@@ -39,11 +38,16 @@ public class Helpers {
         return isMobile;
     }
 
-    public static String getTimeStamp() {
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        simpleDateFormat.setTimeZone(TimeZone.getDefault());
-        return simpleDateFormat.format(calendar.getTime());
+    public static int getPreviousCounterValue() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(
+                AppGlobals.getContext());
+        return sharedPreferences.getInt(AppGlobals.COUNTER_VALUE, 0);
+    }
+
+    public static void saveCounterValue(int counterValue) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(
+                AppGlobals.getContext());
+        sharedPreferences.edit().putInt(AppGlobals.COUNTER_VALUE, counterValue).apply();
     }
 
     public static String getDataDirectory() {
