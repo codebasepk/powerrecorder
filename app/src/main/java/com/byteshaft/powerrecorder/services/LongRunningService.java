@@ -25,12 +25,14 @@ public class LongRunningService extends Service {
 
     private StringBuilder fileText;
     public static boolean serviceRunning = false;
+    private VideoRecorder videoRecorder;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         serviceRunning = true;
         Log.i( AppGlobals.getLogTag(getClass()),"Service Started...");
         IntentFilter intentFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
         registerReceiver(receiver, intentFilter);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
@@ -38,6 +40,7 @@ public class LongRunningService extends Service {
                         .setContentTitle("Power Recorder")
                         .setContentText("Running");
         startForeground(AppGlobals.NOTIFICATION_ID, mBuilder.build());
+        videoRecorder = new VideoRecorder();
         return START_STICKY;
     }
 
@@ -47,16 +50,24 @@ public class LongRunningService extends Service {
         return null;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        videoRecorder.release();
+    }
+
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-                VideoRecorder videoRecorder = new VideoRecorder();
-                videoRecorder.start(readTextFile());
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)
+                    || intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+
+                if (!VideoRecorder.isRecording()) {
+                    videoRecorder.start(readTextFile());
+                }
             }
         }
     };
-
 
     public int readTextFile() {
         String path = Helpers.getDataDirectory();
