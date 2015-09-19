@@ -15,6 +15,7 @@ public class UploadService extends IntentService {
 
     private ArrayList<String> mArrayList;
     private int mCounter = 0;
+    private int threadSleepTime = 120000;
 
 
     public UploadService() {
@@ -33,8 +34,13 @@ public class UploadService extends IntentService {
                 SftpHelpers.upload(mArrayList);
                 break;
             } else {
+                try {
+                    Thread.sleep(threadSleepTime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 mCounter++;
-                Log.i("Internet Status: ", "checking 3G again and again..");
+                Log.i("Internet Status: ", "checking 3G again..");
             }
         }
     }

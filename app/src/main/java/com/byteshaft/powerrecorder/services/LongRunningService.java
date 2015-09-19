@@ -7,9 +7,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.byteshaft.powerrecorder.AppGlobals;
 import com.byteshaft.powerrecorder.Helpers;
+import com.byteshaft.powerrecorder.R;
 import com.byteshaft.powerrecorder.VideoRecorder;
 
 import java.io.BufferedReader;
@@ -21,12 +24,20 @@ import java.io.IOException;
 public class LongRunningService extends Service {
 
     private StringBuilder fileText;
+    public static boolean serviceRunning = false;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        System.out.println("Service Started...");
+        serviceRunning = true;
+        Log.i( AppGlobals.getLogTag(getClass()),"Service Started...");
         IntentFilter intentFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         registerReceiver(receiver, intentFilter);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("Power Recorder")
+                        .setContentText("Running");
+        startForeground(AppGlobals.NOTIFICATION_ID, mBuilder.build());
         return START_STICKY;
     }
 
@@ -79,7 +90,25 @@ public class LongRunningService extends Service {
         catch (IOException e) {
             e.printStackTrace();
         }
-        int t = Integer.valueOf(fileText.toString());
+        String valueFromFile  = fileText.substring(0, Math.min(fileText.length(), 3));
+        System.out.println(valueFromFile);
+        int t;
+        if (checkIfStringIsNumber(valueFromFile)) {
+            t = Integer.valueOf(valueFromFile);
+        } else {
+            t = 10;
+        }
         return t*1000;
+    }
+
+    private boolean checkIfStringIsNumber(String videoDuration) {
+        String regexStr = "^[0-9]*$";
+
+        if(videoDuration.trim().matches(regexStr)) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
