@@ -42,9 +42,9 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
         setCamera(camera);
         setAudioSource(MediaRecorder.AudioSource.MIC);
         setVideoSource(MediaRecorder.VideoSource.CAMERA);
-        setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-        setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-        setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
+        setOutputFormat(OutputFormat.THREE_GPP);
+        setAudioEncoder(AudioEncoder.DEFAULT);
+        setVideoEncoder(VideoEncoder.H264);
         setVideoEncodingBitRate(Helpers.getBitRateForResolution(
                 AppConstants.VIDEO_WIDTH, AppConstants.VIDEO_HEIGHT));
         setOrientationHint(0);

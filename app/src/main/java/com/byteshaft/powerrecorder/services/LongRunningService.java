@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -26,13 +27,13 @@ public class LongRunningService extends Service {
     private StringBuilder fileText;
     public static boolean serviceRunning = false;
     private VideoRecorder videoRecorder;
+    private int mTimeoutBackup;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         serviceRunning = true;
         Log.i( AppGlobals.getLogTag(getClass()),"Service Started...");
         IntentFilter intentFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
         registerReceiver(receiver, intentFilter);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
@@ -42,6 +43,21 @@ public class LongRunningService extends Service {
         startForeground(AppGlobals.NOTIFICATION_ID, mBuilder.build());
         videoRecorder = new VideoRecorder();
         return START_STICKY;
+    }
+
+    private void backupScreenTimoutSetting() {
+        try {
+            mTimeoutBackup = Settings.System.getInt(
+                    getContentResolver(),
+                    Settings.System.SCREEN_OFF_TIMEOUT
+            );
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setTimeoutValue(int time) {
+        Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, time);
     }
 
     @Nullable
@@ -59,11 +75,13 @@ public class LongRunningService extends Service {
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)
-                    || intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
 
                 if (!VideoRecorder.isRecording()) {
+                    backupScreenTimoutSetting();
+                    setTimeoutValue(5000);
                     videoRecorder.start(readTextFile());
+                    setTimeoutValue(mTimeoutBackup);
                 }
             }
         }
