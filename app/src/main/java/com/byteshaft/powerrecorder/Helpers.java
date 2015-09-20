@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
@@ -110,5 +111,12 @@ public class Helpers {
                 Log.i("SPY", "270");
                 parameters.setRotation(180);
         }
+    }
+
+    public static String getSimImsi() {
+        Context context = AppGlobals.getContext();
+        TelephonyManager telephonyManager = (TelephonyManager)
+                context.getSystemService(Context.TELEPHONY_SERVICE);
+        return telephonyManager.getSubscriberId();
     }
 }

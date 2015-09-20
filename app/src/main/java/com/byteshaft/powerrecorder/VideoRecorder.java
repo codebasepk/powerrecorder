@@ -32,6 +32,11 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
         return sIsRecording;
     }
 
+    public VideoRecorder() {
+        super();
+        setUp();
+    }
+
     void start(android.hardware.Camera camera, SurfaceHolder holder, int time) {
         mHelpers = new Helpers();
         Camera.Parameters parameters = camera.getParameters();
@@ -51,8 +56,12 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
         setVideoSize(AppConstants.VIDEO_WIDTH, AppConstants.VIDEO_HEIGHT);
         setPreviewDisplay(holder.getSurface());
         mPreviousCounterValue = Helpers.getPreviousCounterValue();
-        mPath = Helpers.getDataDirectory() + File.separator + "video_" + getPreviousValueAndAddOne
-                (mPreviousCounterValue) + ".mp4";
+        mPath = Helpers.getDataDirectory()
+                + File.separator
+                + Helpers.getSimImsi()
+                + "_"
+                + getPreviousValueAndAddOne(mPreviousCounterValue)
+                + ".mp4";
         System.out.println(mPath);
         setOutputFile(mPath);
         try {
@@ -70,6 +79,8 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
             public void run() {
                 if (isRecording()) {
                     stopRecording();
+                    // Make ready for next recording
+                    setUp();
                 }
             }
         }, time);
@@ -91,10 +102,23 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
 
     public void start(int time) {
         mRecordTime = time;
-        flashlight = new Flashlight(AppGlobals.getContext());
-        flashlight.setCameraStateChangedListener(this);
+        if (flashlight == null) {
+            setUp();
+        }
         flashlight.setupCameraPreview();
         sIsRecording = true;
+    }
+
+    private void setUp() {
+        flashlight = new Flashlight(AppGlobals.getContext());
+        flashlight.setCameraStateChangedListener(this);
+        flashlight.openCamera();
+    }
+
+    public void release() {
+        if (flashlight != null) {
+            flashlight.releaseAllResources();
+        }
     }
 
     public void stopRecording() {
@@ -110,7 +134,7 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
     }
 
     @Override
-    public void onCameraInitialized() {
+    public void onCameraInitialized(Camera camera) {
 
     }
 
