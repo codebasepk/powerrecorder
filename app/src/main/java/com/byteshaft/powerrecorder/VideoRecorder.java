@@ -1,18 +1,11 @@
 package com.byteshaft.powerrecorder;
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
-import android.hardware.SensorManager;
 import android.media.MediaRecorder;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.Surface;
 import android.view.SurfaceHolder;
-import android.view.WindowManager;
 
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
@@ -49,16 +42,16 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
         setCamera(camera);
         setAudioSource(MediaRecorder.AudioSource.MIC);
         setVideoSource(MediaRecorder.VideoSource.CAMERA);
-        setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-        setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-        setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
+        setOutputFormat(OutputFormat.THREE_GPP);
+        setAudioEncoder(AudioEncoder.DEFAULT);
+        setVideoEncoder(VideoEncoder.H264);
         setVideoEncodingBitRate(Helpers.getBitRateForResolution(
                 AppConstants.VIDEO_WIDTH, AppConstants.VIDEO_HEIGHT));
         setOrientationHint(0);
         setVideoSize(AppConstants.VIDEO_WIDTH, AppConstants.VIDEO_HEIGHT);
         setPreviewDisplay(holder.getSurface());
         mPreviousCounterValue = Helpers.getPreviousCounterValue();
-        mPath = Helpers.getDataDirectory()
+        mPath = Helpers.getRecordingDirectory()
                 + File.separator
                 + Helpers.getSimImsi()
                 + "_"
@@ -129,10 +122,19 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
         reset();
         release();
         flashlight.releaseAllResources();
+        moveRecording();
         sIsRecording = false;
         Helpers.saveCounterValue((mPreviousCounterValue + 1));
         AppGlobals.getContext().startService(new Intent(AppGlobals.getContext(),
                 UploadService.class));
+    }
+
+    private void moveRecording() {
+        File source = new File(mPath);
+        File destination = new File(Helpers.getDataDirectory() + "/" + source.getName());
+        if (source.exists()) {
+            source.renameTo(destination);
+        }
     }
 
     @Override

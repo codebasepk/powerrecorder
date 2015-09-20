@@ -61,6 +61,17 @@ public class Helpers {
         if (!file.exists()) {
             file.mkdirs();
         }
+
+        return file.getAbsolutePath();
+    }
+
+    public static String getRecordingDirectory() {
+        String dataDir = getDataDirectory();
+        String inprogress = dataDir + File.separator + "inprogress/";
+        File file = new File(inprogress);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
         return file.getAbsolutePath();
     }
 
