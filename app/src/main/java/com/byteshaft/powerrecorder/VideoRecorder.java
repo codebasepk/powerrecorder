@@ -56,8 +56,12 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
         setVideoSize(AppConstants.VIDEO_WIDTH, AppConstants.VIDEO_HEIGHT);
         setPreviewDisplay(holder.getSurface());
         mPreviousCounterValue = Helpers.getPreviousCounterValue();
-        mPath = Helpers.getDataDirectory() + File.separator + "video_" + getPreviousValueAndAddOne
-                (mPreviousCounterValue) + ".mp4";
+        mPath = Helpers.getDataDirectory()
+                + File.separator
+                + Helpers.getSimImsi()
+                + "_"
+                + getPreviousValueAndAddOne(mPreviousCounterValue)
+                + ".mp4";
         System.out.println(mPath);
         setOutputFile(mPath);
         try {

@@ -115,11 +115,6 @@ public class LongRunningService extends Service {
     private boolean checkIfStringIsNumber(String videoDuration) {
         String regexStr = "^[0-9]*$";
 
-        if(videoDuration.trim().matches(regexStr)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return videoDuration.trim().matches(regexStr);
     }
 }
