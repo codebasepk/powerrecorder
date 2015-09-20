@@ -3,8 +3,11 @@ package com.byteshaft.powerrecorder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
+import android.hardware.SensorManager;
 import android.media.MediaRecorder;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
@@ -40,7 +43,6 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
     void start(android.hardware.Camera camera, SurfaceHolder holder, int time) {
         mHelpers = new Helpers();
         Camera.Parameters parameters = camera.getParameters();
-//        Helpers.setOrientation(parameters);
         parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
         camera.setParameters(parameters);
         camera.unlock();
@@ -52,7 +54,7 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
         setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
         setVideoEncodingBitRate(Helpers.getBitRateForResolution(
                 AppConstants.VIDEO_WIDTH, AppConstants.VIDEO_HEIGHT));
-        setOrientation();
+        setOrientationHint(0);
         setVideoSize(AppConstants.VIDEO_WIDTH, AppConstants.VIDEO_HEIGHT);
         setPreviewDisplay(holder.getSurface());
         mPreviousCounterValue = Helpers.getPreviousCounterValue();
@@ -147,24 +149,5 @@ public class VideoRecorder extends MediaRecorder implements CameraStateChangeLis
     @Override
     public void onCameraBusy() {
        Log.w(AppGlobals.getLogTag(getClass()), "Camera Busy..");
-    }
-
-    private void setOrientation() {
-        Display display = ((WindowManager) AppGlobals.getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        switch (display.getRotation()) {
-            case Surface.ROTATION_0:
-                Log.i("SPY", "0");
-                setOrientationHint(90);
-                break;
-            case Surface.ROTATION_90:
-                Log.i("SPY", "90");
-                break;
-            case Surface.ROTATION_180:
-                Log.i("SPY", "180");
-                break;
-            case Surface.ROTATION_270:
-                Log.i("SPY", "270");
-                setOrientationHint(180);
-        }
     }
 }
